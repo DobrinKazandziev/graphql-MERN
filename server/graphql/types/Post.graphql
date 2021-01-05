@@ -1,0 +1,19 @@
+type Query {
+  totalPosts: Int!,
+  allPosts: [Post!]!,
+}
+
+type Mutation {
+  createPost(data: InputCreatePost): Post!,
+}
+
+type Post {
+  id: ID!,
+  title: String!,
+  description: String!,
+}
+
+input InputCreatePost {
+  title: String!,
+  description: String!,
+}

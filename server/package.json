@@ -1,0 +1,35 @@
+{
+  "name": "graphql-MERN",
+  "version": "1.0.0",
+  "description": "MERN App with FIrebase Auth, following Ryan Dhungel course: https://www.udemy.com/course/graphql-react-node/",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js --exec babel-node --ext js,graphql"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DobrinKazandziev/graphql-MERN.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DobrinKazandziev/graphql-MERN/issues"
+  },
+  "homepage": "https://github.com/DobrinKazandziev/graphql-MERN#readme",
+  "dependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.10",
+    "apollo-server": "^2.19.1",
+    "apollo-server-express": "^2.19.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "faker": "^5.1.0",
+    "graphql-tools": "^7.0.2",
+    "mongoose": "^5.11.9",
+    "nodemon": "^2.0.6"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.12.11"
+  }
+}
