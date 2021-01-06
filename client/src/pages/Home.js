@@ -1,6 +1,8 @@
 import 'dotenv/config';
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { gql, useQuery, useLazyQuery } from '@apollo/client';
+import { AuthContext } from '../context/authContext';
+import { useHistory } from 'react-router-dom';
 
 const GET_ALL_POSTS = gql`
   query {
@@ -25,10 +27,21 @@ const renderPosts = (posts) => posts && posts.map((post) => (
   </div>
 ))
 
+
+
 const Home = () => {
+  let history = useHistory();
   const { data, loading, error } = useQuery(GET_ALL_POSTS); 
   const [fetchPosts, { data: lazyFetchData, loading: loadingLazy }] = useLazyQuery(GET_ALL_POSTS); 
+  const { state, dispatch } = useContext(AuthContext);
 
+  const updateUserName = () => {
+    dispatch({
+      type: 'LOGGED_IN_USER',
+      payload: 'Dobrin',
+    })
+  }
+ 
   if (loading) return <p className="p-5">Loading...</p>
 
   return (
@@ -43,6 +56,8 @@ const Home = () => {
       <div className="row p-5">
         {!loadingLazy && lazyFetchData && renderPosts(lazyFetchData.allPosts)}
       </div>
+      <hr/>
+      <button className="btn btn-primary" onClick={updateUserName}>Change user name</button>
     </div>
   );
 }
