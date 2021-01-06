@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 
-
-
 const Login = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState('');
-  
+
   const handleSubmit = () => {
 
   }

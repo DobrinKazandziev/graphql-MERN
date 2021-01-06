@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { auth } from '../../firebase';
+import { toast } from 'react-toastify';
+import { auth } from '../../utils/firebase';
+import { LS_KEYS, setLSItem } from '../../utils/localStorage';
 
 const Register = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('dobrinkazandziev94@gmail.com');
   const [loading, setLoading] = useState('');
   
   const handleSubmit = async (e) => {
@@ -17,9 +19,10 @@ const Register = () => {
     const result = await auth.sendSignInLinkToEmail(email, config);
     console.log(result)
     //  show toast notification to user about email sent
+    toast.success(`Email is sent to ${email}. Click the link to compelete your registration.`);
 
     //  save user email to local storage
-    window.localStorage.setItem('emailFormRegistration', email);
+    setLSItem(LS_KEYS.EMAIL_FOR_REGISTRATION, email);
     
     //  clear state
     setEmail('');
@@ -28,7 +31,7 @@ const Register = () => {
 
   return (
     <div className="container p-5">
-      <h4>Register</h4>
+      {loading ? (<h4 className="text-danger">Loading...</h4>) : (<h4>Register</h4>)}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Email Address</label>

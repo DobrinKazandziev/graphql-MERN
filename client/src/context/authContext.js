@@ -13,7 +13,6 @@ const firebaseReducer = (state, action) => {
 //  state
 const initialState = {
   user: 'Ryan',
-
 }
 
 //  create context
