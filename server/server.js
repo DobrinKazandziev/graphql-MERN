@@ -7,6 +7,7 @@ import { ApolloServer } from "apollo-server-express";
 import typeDefs from './graphql/types/index';
 import resolvers from './graphql/resolvers/index';
 
+import { authCheck } from './utils/auth';
 import createFakeDB from './utils/fakeDataModule';
 
 const { PORT, DB_ATLAS_URI, DB_LOCAL_URI } = process.env;
@@ -49,7 +50,7 @@ apolloServer.applyMiddleware({ app });
 const httpServer = http.createServer(app);
 
 //  REST endpoint
-app.get('/rest', (req, res) => {
+app.get('/rest', authCheck, (req, res) => {
   res.json({ data: 'You hit rest endpoint' });
 });
 
