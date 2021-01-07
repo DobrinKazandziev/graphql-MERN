@@ -1,16 +1,30 @@
 import React, { useState, useContext } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { gql, useMutation } from '@apollo/client';
 import { AUTH_ACTIONS, AuthContext } from '../../context/authContext';
 import { toast } from 'react-toastify';
 import { auth, googleAuthProvider } from '../../utils/firebase';
 
-const Login = () => {
-  const history = useHistory();
-  const { dispatch } = useContext(AuthContext);
+import AuthForm from '../../components/forms/AuthForm';
 
+const USER_CREATE = gql`
+  mutation userCreate {
+    userCreate {
+      email,
+      userName,
+    }
+  }
+`
+
+const Login = () => {
   const [email, setEmail] = useState('dobrinkazandziev94@gmail.com');
   const [password, setPassword] = useState('gggggg');
   const [loading, setLoading] = useState(false);
+
+  const history = useHistory();
+  const [userCreate] = useMutation(USER_CREATE);
+  const { dispatch } = useContext(AuthContext);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,6 +42,8 @@ const Login = () => {
           });
     
           //  Send user info to our server mongodb to either update/create
+          userCreate();
+
           history.push('/');
         })
     } catch (error) {
@@ -49,6 +65,7 @@ const Login = () => {
         });
 
         //  Send user info to our server mongodb to either update/create
+        userCreate();
 
         history.push('/');
       })
@@ -58,33 +75,15 @@ const Login = () => {
     <div className="container p-5">
       {loading ? (<h4 className="text-danger">Loading...</h4>) : (<h4>Login</h4>)}
       <button onClick={googleLogin} className="btn btn-raised btn-danger mt-5">Login with Google</button>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Email Address</label>
-          <input
-            type="email" 
-            className="form-control"
-            placeholder="Enter Email"
-            disabled={loading}
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password" 
-            className="form-control"
-            placeholder="Enter Password"
-            disabled={loading}
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button className="btn btn-raised btn-primary" disabled={!email || !password || loading}>
-          Submit
-        </button>
-      </form>
+      <AuthForm 
+        loading={loading}
+        email={email}
+        password={password}
+        setEmail={setEmail}
+        setPassword={setPassword}
+        handleSubmit={handleSubmit}
+        showPasswordInput
+      />
     </div>
   );
 };

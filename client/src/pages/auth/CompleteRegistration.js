@@ -1,18 +1,30 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import { gql, useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { AuthContext, AUTH_ACTIONS } from '../../context/authContext';
 import { auth } from '../../utils/firebase';
 import { LS_KEYS, getLSItem, removeLSItem } from '../../utils/localStorage';
 
-const CompleteRegistration = () => {
-  const history = useHistory();
-  const { dispatch } = useContext(AuthContext);
+import AuthForm from '../../components/forms/AuthForm';
 
+const USER_CREATE = gql`
+  mutation userCreate {
+    userCreate {
+      email,
+      userName,
+    }
+  }
+`
+
+const CompleteRegistration = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const history = useHistory();
+  const [userCreate] = useMutation(USER_CREATE);
+  const { dispatch } = useContext(AuthContext);
 
   useEffect(() => {
     setEmail(getLSItem(LS_KEYS.EMAIL_FOR_REGISTRATION));
@@ -31,7 +43,7 @@ const CompleteRegistration = () => {
 
     try {
       const result = await auth.signInWithEmailLink(email, window.location.href);
-
+      console.log('result', result)
       if (result.user.emailVerified) {
         //  remove email from local storage
         removeLSItem(LS_KEYS.EMAIL_FOR_REGISTRATION);
@@ -48,6 +60,7 @@ const CompleteRegistration = () => {
         });
 
         //  make api request to save/update user in mongodb
+        userCreate();
 
         history.push('/');
       }
@@ -62,34 +75,17 @@ const CompleteRegistration = () => {
   return (
     <div className="container p-5">
       {loading ? (<h4 className="text-danger">Loading...</h4>) : (<h4>Complete Your Registration</h4>)}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Email Address</label>
-          <input
-            type="email" 
-            className="form-control"
-            placeholder="Enter Email"
-            disabled
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password" 
-            className="form-control"
-            placeholder="Enter password"
-            disabled={loading}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button className="btn btn-raised btn-primary">Submit</button>
-      </form>
+      <AuthForm 
+        loading={loading}
+        email={email}
+        password={password}
+        setEmail={setEmail}
+        setPassword={setPassword}
+        handleSubmit={handleSubmit}
+        showPasswordInput
+      />
     </div>
   )
 }
 
 export default CompleteRegistration;
-

@@ -17,23 +17,23 @@ const app = express();
 
 //  db
 const fakeDB = createFakeDB();
-// const db = async () => {
-//   try {
-//     const dbConnectSuccess = await mongoose.connect(DB_LOCAL_URI, {
-//       useNewUrlParser: true,
-//       useUnifiedTopology: true,
-//       useCreateIndex: true,
-//       useFindAndModify: false,
-//   });
+const db = async () => {
+  try {
+    const dbConnectSuccess = await mongoose.connect(DB_ATLAS_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+      useFindAndModify: false,
+  });
 
-//     console.log('DB Connected');
-//   } catch (error) {
-//     console.log('DB Connection Error:', error);
-//   }
-// }
+    console.log('DB Connected');
+  } catch (error) {
+    console.log('DB Connection Error:', error);
+  }
+}
 
-// //  execute database connection
-// db();
+//  execute database connection
+db();
 
 const apolloServer = new ApolloServer({
   typeDefs,

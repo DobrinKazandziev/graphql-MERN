@@ -31,6 +31,7 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         const idTokenResult = await user.getIdTokenResult();
+        console.log('auth', idTokenResult)
 
         dispatch({ type: AUTH_ACTIONS.LOGGED_IN_USER, token: idTokenResult.token });
       }

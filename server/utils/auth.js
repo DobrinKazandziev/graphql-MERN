@@ -9,8 +9,8 @@ admin.initializeApp({
 
 const authCheck = async (req) => {
   try {
+    console.log('authCheck', req.headers)
     const currentUser = await admin.auth().verifyIdToken(req.headers.authtoken);
-    console.log('CURRENT USER:', currentUser)
     return currentUser;
   } catch (error) {
     console.log('AUTH CHECK ERROR:', error);

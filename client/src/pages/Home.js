@@ -41,6 +41,9 @@ const Home = () => {
       payload: 'Dobrin',
     })
   }
+
+  console.log('data', loading, data)
+  console.log('lazyFetchData', loadingLazy, lazyFetchData)
  
   if (loading) return <p className="p-5">Loading...</p>
 

@@ -3,9 +3,11 @@ import { toast } from 'react-toastify';
 import { auth } from '../../utils/firebase';
 import { LS_KEYS, setLSItem } from '../../utils/localStorage';
 
+import AuthForm from '../../components/forms/AuthForm';
+
 const Register = () => {
   const [email, setEmail] = useState('dobrinkazandziev94@gmail.com');
-  const [loading, setLoading] = useState('');
+  const [loading, setLoading] = useState(false);
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +19,7 @@ const Register = () => {
     }
 
     const result = await auth.sendSignInLinkToEmail(email, config);
-    console.log(result)
+
     //  show toast notification to user about email sent
     toast.success(`Email is sent to ${email}. Click the link to compelete your registration.`);
 
@@ -26,26 +28,18 @@ const Register = () => {
     
     //  clear state
     setEmail('');
-    setLoading('');
+    setLoading(false);
   }
 
   return (
     <div className="container p-5">
       {loading ? (<h4 className="text-danger">Loading...</h4>) : (<h4>Register</h4>)}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Email Address</label>
-          <input
-            type="email" 
-            className="form-control"
-            placeholder="Enter Email"
-            disabled={loading}
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <button className="btn btn-raised btn-primary">Submit</button>
-      </form>
+      <AuthForm 
+        email={email}
+        loading={loading}
+        setEmail={setEmail}
+        handleSubmit={handleSubmit}
+      />
     </div>
   );
 };
