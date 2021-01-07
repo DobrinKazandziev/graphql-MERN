@@ -1,13 +1,13 @@
 import { gql } from 'apollo-server-express';
 import { authCheck } from '../../utils/auth';
 
-const user = async (parent, args, { req, db }, info) => {
+const currentUser = async (parent, args, { req }, info) => {
   await authCheck(req);
   return 'Dobrin';
 };
 
 module.exports = {
   Query: {
-    user
+    currentUser
   }
 }

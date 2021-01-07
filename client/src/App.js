@@ -1,8 +1,9 @@
 import 'dotenv/config';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { ToastContainer } from 'react-toastify';
+import { AuthContext } from './context/authContext';
 
 import Nav from './components/Nav';
 import Home from './pages/Home';
@@ -10,12 +11,16 @@ import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
 import CompleteRegitration from './pages/auth/CompleteRegistration';
 
-const client = new ApolloClient({
-  uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
-  cache: new InMemoryCache(),
-});
-
 const App = () => {
+  const { state } = useContext(AuthContext);
+  const { user } = state;
+
+  const client = new ApolloClient({
+    uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
+    cache: new InMemoryCache(),
+    headers: { authtoken: user ? user.token : "" }
+  });
+
   return (
     <ApolloProvider client={client}>
       <Nav />
