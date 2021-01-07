@@ -38,9 +38,13 @@ const fakeDB = createFakeDB();
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
-  context: {
-    db: fakeDB,
-  },
+  context: ({ req, res }) => (
+    {
+      req,
+      res,
+      db: fakeDB,
+    }
+  ),
 });
 
 //  applyMiddleware method connects ApoolloServer to a specific HTTP framework ie: express
