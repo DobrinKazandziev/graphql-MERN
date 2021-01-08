@@ -18,7 +18,7 @@ const USER_CREATE = gql`
 
 const Login = () => {
   const [email, setEmail] = useState('dobrinkazandziev94@gmail.com');
-  const [password, setPassword] = useState('gggggg');
+  const [password, setPassword] = useState('123456');
   const [loading, setLoading] = useState(false);
 
   const history = useHistory();

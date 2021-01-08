@@ -30,7 +30,7 @@ const Nav = () => {
           {user && (
               <Fragment>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/profile">Profile</Link>
+                  <Link className="nav-link" to="/profile">{user ? user.email.split("@")[0] : `Profile`}</Link>
                 </li>
               </Fragment>
           )}

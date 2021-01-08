@@ -8,7 +8,6 @@ const PasswordForgot = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
-    console.log('handleSubmit', handleSubmit)
     e.preventDefault();
     setLoading(true);
 
@@ -25,6 +24,7 @@ const PasswordForgot = () => {
      }).catch((error) => {
        setLoading(false);
        console.log(`Error on password forgot email:`, error);
+       toast.error(error.message);
      });
   }
 
