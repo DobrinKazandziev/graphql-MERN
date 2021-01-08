@@ -17,7 +17,7 @@ const firebaseReducer = (state, action) => {
 
 //  state
 const initialState = {
-  user: 'Ryan',
+  user: null,
 }
 
 //  create context
@@ -29,9 +29,9 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      console.log('user', user)
       if (user) {
         const idTokenResult = await user.getIdTokenResult();
-        console.log('auth', idTokenResult)
 
         dispatch({ type: AUTH_ACTIONS.LOGGED_IN_USER, token: idTokenResult.token });
       }

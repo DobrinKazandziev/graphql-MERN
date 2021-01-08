@@ -44,7 +44,7 @@ const Login = () => {
           //  Send user info to our server mongodb to either update/create
           userCreate();
 
-          history.push('/');
+          history.push('/profile');
         })
     } catch (error) {
       console.log('Login Error:', error);
