@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { gql, useMutation } from '@apollo/client';
 import { AUTH_ACTIONS, AuthContext } from '../../context/authContext';
 import { toast } from 'react-toastify';
@@ -84,6 +84,7 @@ const Login = () => {
         handleSubmit={handleSubmit}
         showPasswordInput
       />
+      <Link className="text-danger float-right" to="/password/forgot">Forgot Password</Link>
     </div>
   );
 };
