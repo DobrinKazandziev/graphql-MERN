@@ -1,12 +1,16 @@
-import React, { useState, useMemo } from 'react';
-import { toast } from 'react-toastify';
+import React, { useState, useMemo, useContext } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import omitDeep from "omit-deep-lodash";
+import { toast } from 'react-toastify';
+import omitDeep from 'omit-deep-lodash';
+import Resizer from 'react-image-file-resizer';
+import { AuthContext } from '../../context/authContext';
+import axios from 'axios';
 
 import { GET_PROFILE } from '../../graphql/queries';
 import { USER_UPDATE } from '../../graphql/mutations';
 
 const Profile = () => {
+  const { state } = useContext(AuthContext);
   const [values, setValues] = useState({
     userName: '',
     fullName: '',
@@ -53,9 +57,37 @@ const Profile = () => {
 
   const handleChange = (e) => setValues({ ...values, [e.target.name]: e.target.value })
 
-  const handleImageChange = () => {
-
-  }
+  const fileResizeAndUpload = (e) => {
+    let fileInput = false;
+    if (e.target.files[0]) {
+      fileInput = true;
+    }
+    if (fileInput) {
+      Resizer.imageFileResizer(
+        e.target.files[0],
+        300,
+        300,
+        'JPEG',
+        100,
+        0,
+        (uri) => {
+          axios.post(`${process.env.REACT_APP_REST_ENDPOINT}/upload-images`,
+          { image: uri },
+          { headers: { authtoken: state.user.token } })
+          .then(response => {
+            setLoading(false);
+            console.log('CLOUDINARY UPLOAD:', response);
+            setValues({ ...values, images: [...images, response.data]})
+          }) 
+          .catch(error => {
+            setLoading(false);
+            console.log('CLOUDINARY UPLOAD FAILED:', error);
+          });
+        },
+        'base64',
+      );
+    };
+  };
 
   const profileUpdateForm = () => (
     <form onSubmit={handleSubmit}>
@@ -100,7 +132,7 @@ const Profile = () => {
         <input 
           type="file" 
           accept="image/*"
-          onChange={handleImageChange}
+          onChange={fileResizeAndUpload}
           className="form-control"
           placeholder="Image"
         />

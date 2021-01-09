@@ -17,6 +17,19 @@ const authCheck = async (req) => {
   }
 }
 
+const authCkeckMiddleware = (req, res, next) => {
+  if (req.headers.authtoken) {
+    admin.auth().verifyIdToken(req.headers.authtoken)
+      .then((result) => {
+        next();
+      })
+      .catch((error) => console.log(error));
+  } else {
+    res.json({ error: 'Unathorized' });
+  };
+};
+
 export {
-  authCheck
+  authCheck,
+  authCkeckMiddleware,
 }
