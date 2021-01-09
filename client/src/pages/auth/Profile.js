@@ -1,37 +1,10 @@
-import React, { useState, useMemo, useEffect, Fragment } from 'react';
+import React, { useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import omitDeep from "omit-deep-lodash";
 
-const USER_INFO = gql`
-  fragment userInfo on User {
-    _id,
-    userName,
-    fullName,
-    email,
-    about,
-    images {
-      url,
-      public_id,
-    },
-    createdAt,
-    updatedAt,
-  }
-`;
-
-const PROFILE = gql`
-  query {
-    profile { ...userInfo }
-  }
-  ${USER_INFO}
-`;
-
-const USER_UPDATE = gql`
-  mutation userUpdate($input: UserUpdateInput!) {
-    userUpdate(input: $input) { ...userInfo }
-  }
-  ${USER_INFO}
-`;
+import { GET_PROFILE } from '../../graphql/queries';
+import { USER_UPDATE } from '../../graphql/mutations';
 
 const Profile = () => {
   const [values, setValues] = useState({
@@ -41,17 +14,18 @@ const Profile = () => {
     about: '',
     images: [],
   });
+
   const [loading, setLoading] = useState(false);
 
   const { userName, fullName, email, about, images } = values;
 
-  const { data } = useQuery(PROFILE);
+  const { data } = useQuery(GET_PROFILE);
 
   const [userUpdate] = useMutation(USER_UPDATE, {
     update: (cache, { data: { userUpdate } }) => {
       toast.success('Profile updated');
       cache.writeQuery({
-        query: PROFILE,
+        query: GET_PROFILE,
         data: { profile: userUpdate },
       });
     }
