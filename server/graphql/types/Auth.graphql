@@ -1,3 +1,50 @@
 type Query {
-  currentUser: String!,
+  profile: User!,
 }
+
+#######################
+
+type Mutation {
+  userCreate: UserCreateResponse!,
+  userUpdate(input: UserUpdateInput): User!,
+}
+
+#######################
+type User {
+  _id: ID!,
+  userName: String,
+  fullName: String,
+  email: String,
+  images: [Image],
+  about: String,
+  createdAt: DateTime,
+  updatedAt: DateTime,
+}
+
+type Image {
+  url: String,
+  public_id: String,
+}
+
+# custom Type #########
+type UserCreateResponse {
+  userName: String!,
+  email: String!,
+}
+
+# input Type ##########
+input UserUpdateInput {
+  userName: String,
+  email: String,
+  fullName: String,
+  images: [ImageInput],
+  about: String,
+}
+
+input ImageInput {
+  url: String,
+  public_id: String,
+}
+
+# Scalar Type ##########
+scalar DateTime

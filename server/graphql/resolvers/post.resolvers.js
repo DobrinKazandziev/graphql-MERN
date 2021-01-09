@@ -1,5 +1,5 @@
-import { gql } from 'apollo-server-express';
 import { authCheck } from '../../utils/auth';
+import { DateTimeResolver }  from 'graphql-scalars';
 
 //  Queries
 const totalPosts = async (parent, args, { req, db }, info) => {
