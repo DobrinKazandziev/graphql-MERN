@@ -29,7 +29,6 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      console.log('user', user)
       if (user) {
         const idTokenResult = await user.getIdTokenResult();
 

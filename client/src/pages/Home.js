@@ -2,7 +2,6 @@ import 'dotenv/config';
 import React, { useContext } from 'react';
 import { gql, useQuery, useLazyQuery } from '@apollo/client';
 import { AuthContext } from '../context/authContext';
-import { useHistory } from 'react-router-dom';
 
 const GET_ALL_POSTS = gql`
   query {
@@ -30,10 +29,9 @@ const renderPosts = (posts) => posts && posts.map((post) => (
 
 
 const Home = () => {
-  let history = useHistory();
-  const { data, loading, error } = useQuery(GET_ALL_POSTS); 
+  const { data, loading } = useQuery(GET_ALL_POSTS); 
   const [fetchPosts, { data: lazyFetchData, loading: loadingLazy }] = useLazyQuery(GET_ALL_POSTS); 
-  const { state, dispatch } = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
 
   const updateUserName = () => {
     dispatch({

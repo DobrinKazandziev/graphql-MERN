@@ -72,7 +72,6 @@ app.get('/rest', authCkeckMiddleware, (req, res) => {
 
 app.post('/upload-images', authCkeckMiddleware, (req,res) => {
   cloudinary.uploader.upload(req.body.image, (result) => {
-    // console.log('result', result.iri)
     res.send({
       url: result.url,
       public_id: result.public_id

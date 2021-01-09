@@ -3,7 +3,7 @@ import { Route, Link } from 'react-router-dom';
 import { AuthContext } from '../context/authContext';
 
 const PrivateRoute = ({ children, ...rest }) => {
-  const { state, dispatch } = useContext(AuthContext);
+  const { state } = useContext(AuthContext);
   const [user, setUser] = useState(false);
 
   useEffect(() => {

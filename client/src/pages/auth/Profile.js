@@ -89,6 +89,24 @@ const Profile = () => {
     };
   };
 
+  const handleImageRemove = (id) => {
+    setLoading(true);
+    axios.post(`${process.env.REACT_APP_REST_ENDPOINT}/remove-image`, 
+    { public_id: id },
+    { headers: { authtoken: state.user.token } })
+    .then((response) => {
+      setLoading(false);
+      let filteredImages = images.filter((item) => {
+        return item.public_id !== id;
+      });
+      setValues({ ...values, images: filteredImages });
+    })
+    .catch((error) => {
+      setLoading(false);
+      console.log('Image Remove Error:', error)
+    })
+  }
+
   const profileUpdateForm = () => (
     <form onSubmit={handleSubmit}>
       <div className="form-group">
@@ -128,16 +146,6 @@ const Profile = () => {
         />
       </div>
       <div className="form-group">
-        <label className="bmd-label-floating">Image</label>
-        <input 
-          type="file" 
-          accept="image/*"
-          onChange={fileResizeAndUpload}
-          className="form-control"
-          placeholder="Image"
-        />
-      </div>
-      <div className="form-group">
         <label className="bmd-label-floating">About</label>
         <input 
           type="text" 
@@ -154,7 +162,39 @@ const Profile = () => {
   )
   
   return (
-    <div className="container p-5">{profileUpdateForm()}</div>
+    <div className="container p-5">
+      <div className="row">
+        <div className="col-md-3">
+          <div className="form-group">
+            <label className="btn btn-primary">
+              Upload Image
+              <input 
+                hidden
+                type="file" 
+                accept="image/*"
+                onChange={fileResizeAndUpload}
+                className="form-control"
+                placeholder="Image"
+              />
+            </label>
+          </div>
+        </div>
+        <div className="col-md-9">
+          {images.map((image) => (
+            <img 
+              src={image.url} 
+              key={image.public_id} 
+              alt={image.public_id} 
+              style={{ height: '100px', cursor: 'not-allowed'}}
+              className='float-right'
+              onClick={() => handleImageRemove(image.public_id)}
+            />
+            // <button className=""></button>
+          ))}
+        </div>
+      </div>
+      {profileUpdateForm()}
+    </div>
   );
 };
 

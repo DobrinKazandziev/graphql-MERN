@@ -18,7 +18,7 @@ const Register = () => {
       handleCodeInApp: true,
     }
 
-    const result = await auth.sendSignInLinkToEmail(email, config);
+    await auth.sendSignInLinkToEmail(email, config);
 
     //  show toast notification to user about email sent
     toast.success(`Email is sent to ${email}. Click the link to compelete your registration.`);
