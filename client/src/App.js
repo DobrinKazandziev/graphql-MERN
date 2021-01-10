@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import { AuthContext } from './context/authContext';
 
 import PrivateRoute from './components/PrivateRoute';
+import PublicRoute from './components/PublicRoute';
 import Nav from './components/Nav';
 import Home from './pages/Home';
 import Register from './pages/auth/Register';
@@ -18,12 +19,12 @@ import Post from './pages/post/Post';
 
 const App = () => {
   const { state } = useContext(AuthContext);
-  const { user } = state;
+  const { userToken } = state;
 
   const client = new ApolloClient({
     uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
     cache: new InMemoryCache(),
-    headers: { authtoken: user ? user.token : "" }
+    headers: { authtoken: userToken ? userToken : "" }
   });
 
   return (
@@ -32,8 +33,8 @@ const App = () => {
       <ToastContainer />
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/login" component={Login} />
+        <PublicRoute exact path="/register" component={Register} />
+        <PublicRoute exact path="/login" component={Login} />
         <Route exact path="/complete-registration" component={CompleteRegitration} />
         <Route exact path="/password/forgot" component={PasswordForgot} />
         <PrivateRoute exact path="/password/update" component={PasswordUpdate} />
