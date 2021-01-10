@@ -5,6 +5,7 @@ import { AUTH_ACTIONS, AuthContext } from '../../context/authContext';
 import { toast } from 'react-toastify';
 import { auth, googleAuthProvider } from '../../utils/firebase';
 
+import { LS_KEYS, setLSItem } from '../../utils/localStorage';
 import AuthForm from '../../components/forms/AuthForm';
 
 const USER_CREATE = gql`
@@ -38,8 +39,11 @@ const Login = () => {
 
           dispatch({
             type: AUTH_ACTIONS.LOGGED_IN_USER,
-            payload: { email: user.email, token: idTokenResult.token },
+            payload: { userEmail: user.email, userToken: idTokenResult.token },
           });
+
+          setLSItem(LS_KEYS.CURRENT_USER_EMAIL, user.email);
+          setLSItem(LS_KEYS.CURRENT_USER_TOKEN, idTokenResult.token);
     
           //  Send user info to our server mongodb to either update/create
           userCreate();
@@ -61,8 +65,11 @@ const Login = () => {
 
         dispatch({
           type: AUTH_ACTIONS.LOGGED_IN_USER,
-          payload: { email: user.email, token: idTokenResult.token },
+          payload: { userEmail: user.email, userToken: idTokenResult.token },
         });
+
+        setLSItem(LS_KEYS.CURRENT_USER_EMAIL, user.email);
+        setLSItem(LS_KEYS.CURRENT_USER_TOKEN, idTokenResult.token);
 
         //  Send user info to our server mongodb to either update/create
         userCreate();

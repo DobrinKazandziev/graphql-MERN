@@ -1,20 +1,20 @@
 import React, { Fragment, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { auth } from '../utils/firebase';
-import { AUTH_ACTIONS, AuthContext } from '../context/authContext';
+import { AuthContext } from '../context/authContext';
+
+import { clearLS } from '../utils/localStorage';
 
 const Nav = () => {
   const history = useHistory();
-  const { state, dispatch } = useContext(AuthContext);
+  const { state } = useContext(AuthContext);
 
-  const { user } = state;
+  const { userEmail } = state;
 
   const logout = () => {
+    clearLS();
     auth().signOut();
-    dispatch({
-      type: AUTH_ACTIONS.LOGGED_IN_USER,
-      payload: null,
-    })
+
     history.push('/login');
   }
 
@@ -27,14 +27,14 @@ const Nav = () => {
 
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
-          {user && (
+          {userEmail && (
               <Fragment>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/profile">{user ? user.email.split("@")[0] : `Profile`}</Link>
+                  <Link className="nav-link" to="/profile">{userEmail ? userEmail.split("@")[0] : `Profile`}</Link>
                 </li>
               </Fragment>
           )}
-          {!user && (
+          {!userEmail && (
             <Fragment>
               <li className="nav-item active">
                 <Link className="nav-link" to="/login">Login</Link>
@@ -44,7 +44,7 @@ const Nav = () => {
               </li>
             </Fragment>
           )}
-          {user && (
+          {userEmail && (
             <Fragment>
               <li className="nav-item">
                 <a onClick={logout} className="nav-item nav-link" href="/login">Logout</a>

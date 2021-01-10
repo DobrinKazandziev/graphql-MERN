@@ -43,7 +43,6 @@ const CompleteRegistration = () => {
 
     try {
       const result = await auth.signInWithEmailLink(email, window.location.href);
-      console.log('result', result)
       if (result.user.emailVerified) {
         //  remove email from local storage
         removeLSItem(LS_KEYS.EMAIL_FOR_REGISTRATION);
@@ -53,16 +52,17 @@ const CompleteRegistration = () => {
         await user.updatePassword(password);
 
         //  dispatch user with token and email, then redirect
-        const idTokenResult = await user.getIdTokenResult;
+        const idTokenResult = await user.getIdTokenResult();
+
         dispatch({
           type: AUTH_ACTIONS.LOGGED_IN_USER,
-          payload: { email: user.email, token: idTokenResult },  
+          payload: { userEmail: user.email, userToken: idTokenResult.token },  
         });
 
         //  make api request to save/update user in mongodb
         userCreate();
 
-        history.push('/profile');
+        history.push('/password/update');
       }
       
     } catch (error) {

@@ -1,5 +1,5 @@
-import React, { useEffect, useReducer, createContext } from 'react';
-import { auth } from '../utils/firebase';
+import React, { useReducer, createContext } from 'react';
+import { LS_KEYS, getLSItem } from '../utils/localStorage';
 
 const AUTH_ACTIONS = {
   LOGGED_IN_USER: 'LOGGED_IN_USER',
@@ -9,7 +9,7 @@ const AUTH_ACTIONS = {
 const firebaseReducer = (state, action) => {
   switch (action.type) {
     case AUTH_ACTIONS.LOGGED_IN_USER:
-      return {...state, user: action.payload}
+      return {...state, userEmail: action.payload.userEmail, userToken: action.payload.userToken }
     default:
       return state;
   }
@@ -17,7 +17,8 @@ const firebaseReducer = (state, action) => {
 
 //  state
 const initialState = {
-  user: null,
+  userEmail: null,
+  userToken: null,
 }
 
 //  create context
@@ -25,19 +26,11 @@ const AuthContext = createContext();
 
 //  context provider
 const AuthProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(firebaseReducer, initialState);
+  const currentUserEmail = getLSItem(LS_KEYS.CURRENT_USER_EMAIL);
+  const currentUserToken = getLSItem(LS_KEYS.CURRENT_USER_TOKEN);
+  const pastState = { userEmail: currentUserEmail, userToken: currentUserToken };
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const idTokenResult = await user.getIdTokenResult();
-
-        dispatch({ type: AUTH_ACTIONS.LOGGED_IN_USER, token: idTokenResult.token });
-      }
-    })
-    //  cleanup
-    return () => unsubscribe();
-  }, [])
+  const [state, dispatch] = useReducer(firebaseReducer, currentUserToken ? pastState : initialState);
 
   const value = {state, dispatch};
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

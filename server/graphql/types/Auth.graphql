@@ -1,5 +1,7 @@
 type Query {
   profile: User!,
+  publicProfile(userName: String!): User!,
+  allUsers: [User!]!,
 }
 
 #######################

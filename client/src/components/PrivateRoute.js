@@ -2,15 +2,17 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Route, Link } from 'react-router-dom';
 import { AuthContext } from '../context/authContext';
 
+import LoadingToRedirect from './LoadingToRedirect';
+
 const PrivateRoute = ({ children, ...rest }) => {
   const { state } = useContext(AuthContext);
   const [user, setUser] = useState(false);
 
   useEffect(() => {
-    if (state.user) {
+    if (state.userToken) {
       setUser(true);
     }
-  }, [state.user]);
+  }, [state.userToken]);
 
   const navLinks = () => (
     <nav>
@@ -29,7 +31,7 @@ const PrivateRoute = ({ children, ...rest }) => {
   );
 
   const renderContent = () => (
-    <div className="container-fluid pt-5">
+    <div className="container-fluid pt-15">
       <div className="row">
         <div className="col-md-4">
           {navLinks()}
@@ -41,7 +43,7 @@ const PrivateRoute = ({ children, ...rest }) => {
     </div>
   )
 
-  return user ? renderContent() : <h4>Loading...</h4>
+  return user ? renderContent() : <LoadingToRedirect path="/login" />
 }
 
 export default PrivateRoute;

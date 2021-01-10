@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useContext } from 'react';
+import React from 'react';
 
 const UserProfile = ({
   handleSubmit,

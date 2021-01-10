@@ -11,6 +11,14 @@ const profile = async (parent, args, { req }, info) => {
   return profile;
 };
 
+const publicProfile = async (parent, { userName }, { req }, info) => {
+  return await User.findOne({ userName }).exec();
+}
+
+const allUsers = async (parent, args, { req }, info) => {
+  return await User.find({}).exec();
+}
+
 //  Mutations
 const userCreate = async (parent, args, { req }, info) => {
   const currentUser = await authCheck(req);
@@ -33,7 +41,9 @@ const userUpdate = async (parent, { input }, { req }, info) => {
 
 module.exports = {
   Query: {
-    profile
+    profile,
+    publicProfile,
+    allUsers,
   },
   Mutation: {
     userCreate,

@@ -30,7 +30,7 @@ const FileUpload = ({
         (uri) => {
           axios.post(`${process.env.REACT_APP_REST_ENDPOINT}/upload-images`,
           { image: uri },
-          { headers: { authtoken: state.user.token } })
+          { headers: { authtoken: state.userToken } })
           .then(response => {
             setLoading(false);
             console.log('CLOUDINARY UPLOAD:', response);
@@ -50,7 +50,7 @@ const FileUpload = ({
     setLoading(true);
     axios.post(`${process.env.REACT_APP_REST_ENDPOINT}/remove-image`, 
     { public_id: id },
-    { headers: { authtoken: state.user.token } })
+    { headers: { authtoken: state.userToken } })
     .then((response) => {
       setLoading(false);
       let filteredImages = values.images.filter((item) => {

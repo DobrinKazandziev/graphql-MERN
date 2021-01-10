@@ -1,5 +1,7 @@
 const LS_KEYS = {
   EMAIL_FOR_REGISTRATION: "emailFormRegistration",
+  CURRENT_USER_EMAIL: 'currentUserEmail',
+  CURRENT_USER_TOKEN: 'currentUserToken',
 }
 
 const isKeyValid = (enteredKey) => {
