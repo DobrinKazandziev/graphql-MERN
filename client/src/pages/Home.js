@@ -1,17 +1,9 @@
 import 'dotenv/config';
 import React, { useContext } from 'react';
-import { gql, useQuery, useLazyQuery } from '@apollo/client';
+import { useQuery, useLazyQuery } from '@apollo/client';
 import { AuthContext } from '../context/authContext';
 
-const GET_ALL_POSTS = gql`
-  query {
-    allPosts {
-      id
-      title
-      description
-    }
-  }
-`
+import { GET_ALL_POSTS } from '../graphql/queries';
 
 const renderPosts = (posts) => posts && posts.map((post) => (
   <div key={post.id} className="col-md-4">
@@ -45,7 +37,7 @@ const Home = () => {
   return (
     <div className="container">
       <div className="row p-5">
-        {!loading && renderPosts(data.allPosts)}
+        {!loading && data && renderPosts(data.allPosts)}
       </div>
       <hr/>
       <div className="row p-5">

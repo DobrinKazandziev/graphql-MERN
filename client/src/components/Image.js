@@ -8,8 +8,8 @@ const Image = ({
     src={image.url} 
     key={image.public_id} 
     alt={image.public_id} 
-    style={{ height: '100px', cursor: 'not-allowed'}}
-    className='float-right'
+    style={{ height: '150px', width: '150px' ,cursor: 'not-allowed'}}
+    className='img-thumbnail m-3 rounded mx-auto'
     onClick={() => handleImageRemove(image.public_id)}
   />
 );
