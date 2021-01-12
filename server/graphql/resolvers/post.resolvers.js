@@ -1,29 +1,42 @@
 import { authCheck } from '../../utils/auth';
 import { DateTimeResolver }  from 'graphql-scalars';
 
+import User from '../../models/user';
+import Post from '../../models/post';
+
 //  Queries
-const totalPosts = async (parent, args, { req, db }, info) => {
-  await authCheck(req);
-  return db.posts.length;
+const allPosts = async (parent, args, ctx, info) => {
+  return await Post.find({}).exec();
 };
-const allPosts = async (parent, args, { req, db }, info) => {
-  await authCheck(req);
-  return db.posts;
+
+const postsByUser = async (parent, args, { req }, info) => {
+  const currentUser = await authCheck(req);
+  const currentUserFromDB = await User.findOne({ email: currentUser.email });
+
+  return await Post.find({ postedBy: currentUserFromDB })
+    .populate('postedBy', '_id email userName fullName')
+    .sort({ createdAt: -1 });
 };
 
 //  Mutations
-const createPost = async (parent, { data }, { req, db }, info) => {
-  await authCheck(req);
-  const newPost = { id: db.posts.length, ...data };
-  db.posts.push(newPost);
+const createPost = async (parent, { data }, { req }, info) => {
+  const currentUser = await authCheck(req);
+  const currentUserFromDB = await User.findOne({ email: currentUser.email });
+  
+  if (data.content.trim() === '') {
+    throw new Error('Content is required!');
+  }
+
+  let newPost = await new Post({ ...data, postedBy: currentUserFromDB._id }).save()
+  .then((post) => post.populate('postedBy', '_id email fullName userName').execPopulate());
 
   return newPost;
 }
 
 module.exports = {
   Query: {
-    totalPosts,
     allPosts,
+    postsByUser,
   },
   Mutation: {
     createPost,

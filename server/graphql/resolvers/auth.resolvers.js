@@ -36,6 +36,7 @@ const userUpdate = async (parent, { input }, { req }, info) => {
     { ...input }, 
     { new: true },
   ).exec();
+
   return updatedUser;
 }
 

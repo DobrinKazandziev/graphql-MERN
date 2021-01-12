@@ -1,6 +1,6 @@
 type Query {
-  totalPosts: Int!,
   allPosts: [Post!]!,
+  postsByUser: [Post!]!,
 }
 
 type Mutation {
@@ -8,12 +8,13 @@ type Mutation {
 }
 
 type Post {
-  id: ID!,
-  title: String!,
-  description: String!,
+  _id: ID!,
+  content: String!,
+  image: Image,
+  postedBy: User,
 }
 
 input InputCreatePost {
-  title: String!,
-  description: String!,
+  content: String!,
+  # image: ImageInput!,
 }

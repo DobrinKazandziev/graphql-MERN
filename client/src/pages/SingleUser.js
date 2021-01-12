@@ -16,7 +16,6 @@ const SingleUser = () => {
   return (
     <div className="container"><UserCard user={data.publicProfile} /></div>
   )
-
 }
 
 export default SingleUser;

@@ -1,0 +1,87 @@
+query Query {
+  profile {
+    ...UserInfo
+  }
+}
+
+query Query {
+  publicProfile(userName: "DobrinK") {
+    ...UserInfo
+  }
+}
+
+query Query {
+  allUsers {
+    ...UserInfo
+  }
+}
+
+query Query {
+  allPosts {
+    ...PostInfoBasic
+  }
+}
+
+query Query {
+  postsByUser {
+    ...PostInfoByUser
+  }
+}
+
+query Query($publicProfileUserName: String!) {
+  publicProfile(userName: $publicProfileUserName) {
+    ...UserInfo
+  }
+}
+
+mutation CreatePostMutation($createPostData: InputCreatePost) {
+  createPost(data: $createPostData) {
+    ...PostInfoByUser
+  }
+}
+
+mutation UserCreateMutation{
+  userCreate {
+    userName
+    email
+  }
+}
+
+mutation UserUpdateMutation($userUpdateInput: UserUpdateInput){
+  userUpdate(input: $userUpdateInput) {
+    ...UserInfo
+  }
+}
+
+fragment UserInfo on User {
+  _id
+  email
+  userName
+  fullName
+  about
+  images {
+    url
+    public_id
+  }
+  createdAt
+  updatedAt
+}
+
+fragment PostInfoBasic on Post {
+    _id
+    content
+    image {
+      public_id
+      url
+    }
+}
+
+fragment PostInfoByUser on Post {
+    ...PostInfoBasic
+    postedBy {
+      _id
+      email
+      userName
+      fullName
+    }
+}
